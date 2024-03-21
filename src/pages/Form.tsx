@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import Editor from '@monaco-editor/react';
 import Navbar from '../component/Navbar';
@@ -12,11 +12,6 @@ const Form: React.FC = () => {
         stdin: '',
         code: ''
     });
-    const editorRef = useRef(null);
-
-    function handleEditorDidMount(editor) {
-        editorRef.current = editor;
-    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -100,8 +95,12 @@ const Form: React.FC = () => {
                             theme="vs-dark"
                             language={formData.language}
                             value={formData.code}
-                            onMount={handleEditorDidMount}
-                            onChange={(code) => setFormData({ ...formData, code })}
+                            // onMount={handleEditorDidMount}
+                            onChange={(code) => {
+                                if (code !== undefined) { // Check if code is not undefined
+                                    setFormData({ ...formData, code });
+                                }
+                            }}
                         />
                     </div>
                     <button type="submit" className="px-8 py-3 bg-blue-500 text-white rounded-md focus:outline-none focus:ring focus:border-blue-300">Submit</button>
